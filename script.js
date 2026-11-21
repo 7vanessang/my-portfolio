@@ -31,8 +31,8 @@ const GH = "https://github.com/7vanessang?tab=repositories";
 const PROJ = [
   ["polaris","Nov 2026","RBC WTAP 2026 hackathon","A first-line mentor for RBC early talent that turns what students ask into anonymized program insight.","typescript","https://github.com/7vanessang/rbc-wtap-2026-hackathon"],
   ["retain","Mar 2026","MedSprint 2026 · 1st in track, 3rd overall","A medium-fidelity, tongue-controlled knee brace design.","c++","https://github.com/7vanessang/retain"],
-  ["wordlock","Mar 2026","CSC108 assignment 1 · 100%","The game functions for a word-lock puzzle, written for U of T's intro to programming.","python","https://github.com/7vanessang/csc108_wordlock"],
   ["battleship","Mar 2026","CSC108 assignment 2 · 98%","The game functions for Battleship, tracking ships through hit, miss and sink.","python","https://github.com/7vanessang/csc108_battleship"],
+  ["wordlock","Mar 2026","CSC108 assignment 1 · 100%","The game functions for a word-lock puzzle, using string manipulation and conditional logics.","python","https://github.com/7vanessang/csc108_wordlock"],
   ["immi","Jan 2026","Best Use of ElevenLabs · MLH, DeltaHacks 12","Assistive technology, software and hardware, built at DeltaHacks 12.","html","https://github.com/7vanessang/immi"],
   ["the channel","2021 – 2023","YouTube Partner","An Animal Crossing channel grown to 1M+ views, 11K+ subscribers and 7K+ watch hours.","video / editing / community",""]
 ];
@@ -41,7 +41,7 @@ const AW = [
   ["MedSprint, McMaster","1st in track, 3rd overall · for retain","2026",""],
   ["DeltaHacks 12","Best Use of ElevenLabs, an MLH award · for immi","2026","https://devpost.com/software/immi-325jt0"],
   ["Dennis Weishar Engineering Design Award","University of Waterloo EV Challenge · top prize across all university and high school teams","2024","https://uwaterloo.ca/electric-vehicle-challenge/2024-race-results"],
-  ["Mechanical CAD, provincial top 15","Skills Ontario","2024",""],
+  ["Mechanical CAD, provincial top 15","Skills Ontario","2023","https://skillsontario.com/wp-content/uploads/1a2023_SOC_Results.pdf"],
   ["Guest speaker, Siemens national town halls","the first students invited","2024",""]
 ];
 const TK = [
@@ -55,7 +55,7 @@ const EDU = [
   ["2025","Westmount Secondary School","Specialist High Skills Major in Environmental Studies · Wildcat Award"],
   ["2024","Mohawk College","Aircraft Maintenance dual credit, completed in grade 11: advanced composites and aircraft engines, with honours"]
 ];
-const CAMPUS = ["UTFR Chief of Staff, Business Recruitment","UTFR External Relations Associate","UTCA Associate Consultant","IPS Summer Product Member"];
+const CAMPUS = ["UTFR Business Recruitment Lead","UTFR External Relations Associate","UTCA Associate Consultant","IPS Summer Product Member"];
 const OFF = ["photography","dumpling folding","live music","motorsport","fitness & wellness"];
 
 let ri = 0; const r = () => `class="r" style="--i:${ri++}"`;
