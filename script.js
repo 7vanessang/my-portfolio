@@ -224,19 +224,22 @@ const hint = document.createElement("div");
 hint.className = "hint"; hint.setAttribute("aria-hidden", "true");
 hint.innerHTML = `<div class="hb"><svg class="hsvg"><path class="hp"/><path class="hh"/></svg><button class="ht" type="button" tabindex="-1">click here</button></div>`;
 document.body.appendChild(hint);
-function scheduleHint(){ if (hintDone || hintTimer) return; hintTimer = setTimeout(showHint, INTRO_END + 6000); }
+function scheduleHint(){ if (hintDone || hintTimer) return; hintTimer = setTimeout(showHint, INTRO_END + 4000); }
 function showHint(){
   hintTimer = 0;
   if (hintDone || cur !== 0) return;
   const r = items[1].querySelector(".ti").getBoundingClientRect();
   const c = {x: r.left + r.width/2, y: r.top + r.height/2};
   const phone = mq.matches;
-  const tx = phone ? c.x - 95 : c.x - 60, ty = phone ? c.y - 125 : c.y + 125;
+  const tx = phone ? c.x - 100 : c.x - 60; let ty = phone ? c.y - 165 : c.y + 105;
+  const cb = document.getElementById("contact").getBoundingClientRect();
+  if (phone && cb.height && ty - 14 < cb.bottom + 10) ty = cb.bottom + 26;
   const ht = hint.querySelector(".ht"); ht.style.left = tx + "px"; ht.style.top = ty + "px";
-  const s = {x: tx + (phone ? 20 : 6), y: ty + (phone ? 12 : -16)};
+  const s = {x: tx + (phone ? 24 : 8), y: ty + (phone ? 14 : -14)};
   const L = Math.hypot(c.x - s.x, c.y - s.y), ux = (c.x - s.x)/L, uy = (c.y - s.y)/L;
-  const gap = phone ? 46 : 52, e = {x: c.x - ux*gap, y: c.y - uy*gap};
-  const m = {x: (s.x + e.x)/2 - uy*22, y: (s.y + e.y)/2 + ux*22};
+  const len = Math.min(phone ? 62 : 54, L - (phone ? 50 : 52));
+  const e = {x: s.x + ux*len, y: s.y + uy*len};
+  const m = {x: (s.x + e.x)/2 + uy*8, y: (s.y + e.y)/2 - ux*8};
   const hp = hint.querySelector(".hp"); hp.setAttribute("d", `M${s.x} ${s.y} Q${m.x} ${m.y} ${e.x} ${e.y}`);
   let ax = e.x - m.x, ay = e.y - m.y; const al = Math.hypot(ax, ay); ax /= al; ay /= al;
   const head = a => { const cs = Math.cos(a), sn = Math.sin(a); return `${e.x - 9*(ax*cs - ay*sn)} ${e.y - 9*(ax*sn + ay*cs)}`; };
