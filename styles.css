@@ -186,7 +186,7 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
   .item .lay{gap:8px}.item .tx{gap:8px}
   .item .n{font-size:11px}.item .ti{font-size:22px}.item .su{font-size:13px;letter-spacing:.2px}
   .name{width:120px}.name .ti{font-size:24px}
-  .fadeb2{display:block;position:fixed;left:0;right:0;bottom:0;height:calc(var(--wz) + 20px);z-index:9;pointer-events:none;background:linear-gradient(to bottom,transparent,color-mix(in srgb,var(--bg) 88%,transparent) 20px)}
+  .fadeb2{display:block;position:fixed;left:0;right:0;bottom:0;height:calc(var(--wz) + 90px);z-index:9;pointer-events:none;background:linear-gradient(to bottom,transparent,color-mix(in srgb,var(--bg) 38%,transparent))}
   .contact .mail{font-size:17px}
   .bg .veil{background:var(--bg)}
   .open .bg .veil{opacity:.5}
