@@ -36,7 +36,39 @@ const PROJ = [
   ["immi","Jan 2026","Best Use of ElevenLabs · MLH, DeltaHacks 12","Assistive technology, software and hardware, built at DeltaHacks 12.","html","https://github.com/7vanessang/immi"],
   ["the channel","2021 – 2023","YouTube Partner","An Animal Crossing channel grown to 1M+ views, 11K+ subscribers and 7K+ watch hours.","video / editing / community",""]
 ];
-const JOUR = [];
+/* Journal entries live in journal.md. Each entry starts with "## YYYY-MM-DD · title". */
+let JOUR = null;
+const MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+function inlineMd(t){
+  return esc(t)
+    .replace(/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g, '<a href="$2" target="_blank" rel="noreferrer">$1</a>')
+    .replace(/\*\*([^*]+)\*\*/g, "<b>$1</b>")
+    .replace(/\*([^*]+)\*/g, "<i>$1</i>");
+}
+function parseJournal(md){
+  md = md.replace(/<!--[\s\S]*?-->/g, "");
+  return md.split(/^## /m).slice(1).map(block=>{
+    const nl = block.indexOf("\n");
+    const head = (nl < 0 ? block : block.slice(0, nl)).trim();
+    const body = nl < 0 ? "" : block.slice(nl + 1).trim();
+    const m = head.match(/^(\d{4})-(\d{2})-(\d{2})\s*[·|\-–—:]\s*(.+)$/);
+    if (!m) return null;
+    const paras = body.split(/\n\s*\n/).map(p=>p.trim().replace(/\n/g," ")).filter(Boolean);
+    return {key:m[1]+m[2]+m[3], y:m[1], mo:MONTHS[+m[2]-1]||"", d:String(+m[3]), title:m[4].trim(), paras};
+  }).filter(Boolean).sort((a,b)=>b.key.localeCompare(a.key));
+}
+function journalHTML(){
+  if (!JOUR) return `<p class="note">loading…</p>`;
+  if (!JOUR.length) return `<p class="note r" style="--i:2;margin:0">nothing here yet. first entry coming soon.</p>`;
+  return `<div class="jour">${JOUR.map((j,k)=>`<article class="entry r" style="--i:${k+2}"><div class="dt"><b>${esc(j.d)}</b>${esc(j.mo)} ${esc(j.y)}</div><div><h3>${esc(j.title)}</h3>${j.paras.map((p,n)=>`<p${n?' class="more" hidden':""}>${inlineMd(p)}</p>`).join("")}${j.paras.length>1?`<button class="readmore" type="button" aria-expanded="false">read more</button>`:""}</div></article>`).join("")}</div>`;
+}
+function loadJournal(){
+  if (JOUR) return;
+  fetch("journal.md", {cache:"no-cache"})
+    .then(r => r.ok ? r.text() : "")
+    .catch(() => "")
+    .then(t => { JOUR = parseJournal(t); const box = document.getElementById("jbox"); if (box){ box.innerHTML = journalHTML(); requestAnimationFrame(fitMask); } });
+}
 const AW = [
   ["MedSprint, McMaster","1st in track, 3rd overall · for retain","2026",""],
   ["DeltaHacks 12","Best Use of ElevenLabs, an MLH award · for immi","2026","https://devpost.com/software/immi-325jt0"],
@@ -78,7 +110,7 @@ const BODY = {
   },
   experience: i => head(i) + `<ol class="exp">${EXP.map(e=>`<li ${r()}${e[4]?' data-on':""}><div class="role">${cap(e[1])}</div><div class="meta"><span class="org">${esc(e[2])}</span><span class="d">${esc(e[0])}</span></div><p>${esc(e[3])}</p></li>`).join("")}</ol>`,
   projects: i => head(i) + `<a class="ghall r" style="--i:${ri++}" href="${GH}" target="_blank" rel="noreferrer">all repositories on github ↗</a><div class="proj">${PROJ.map(p=>`<article class="card r" style="--i:${ri++}"><div class="hd"><h3>${esc(p[0])}</h3><span class="y">${esc(p[1])}</span></div>${p[2]?`<span class="badge">${esc(p[2])}</span>`:""}<p>${esc(p[3])}</p><span class="tags">${esc(p[4])}</span>${p[5]?` · <a class="gh" href="${esc(p[5])}" target="_blank" rel="noreferrer">repo ↗</a>`:""}</article>`).join("")}</div>`,
-  journal: i => head(i) + (JOUR.length ? "" : `<p class="note r" style="--i:${ri++};margin:0">nothing here yet. first entry coming soon.</p>`) + `<div class="jour">${JOUR.map(j=>`<article class="entry r" style="--i:${ri++}"><div class="dt"><b>${esc(j[0])}</b>${esc(j[1])}</div><div><h3>${esc(j[2])}</h3><p>${esc(j[3])}</p></div></article>`).join("")}</div>`,
+  journal: i => { loadJournal(); return head(i) + `<div id="jbox">${journalHTML()}</div>`; },
   awards: i => head(i) + `<ol class="aw">${AW.map((a,k)=>`<li ${r()}><span class="n">${num(k+1)}</span><div><div class="t">${a[3]?`<a href="${esc(a[3])}" target="_blank" rel="noreferrer">${cap(a[0])}<span class="arr"> ↗</span></a>`:cap(a[0])}</div><div class="s">${esc(a[1])}</div></div><span class="yr">${esc(a[2])}</span></li>`).join("")}</ol>`,
   toolkit: i => head(i) + `<div class="tk">${TK.map(g=>`<div ${r()}><p class="lab">${esc(g[0])}</p><div class="chips">${g[1].map(c=>`<span class="chip">${esc(c)}</span>`).join("")}</div></div>`).join("")}</div>`,
   education: i => head(i) + `<div class="edu">${EDU.map(e=>`<div class="school r" style="--i:${ri++}"><span class="big">${esc(e[0])}</span><div><h3>${esc(e[1])}</h3><p>${esc(e[2])}</p>${e[3]?`<p class="lab" style="margin:12px 0 7px;color:var(--muted)">on campus</p><div class="chips">${CAMPUS.map(c=>`<span class="chip">${esc(c)}</span>`).join("")}</div>`:""}</div></div>`).join("")}</div>`,
@@ -170,6 +202,10 @@ rot.addEventListener("click", e=>{
   const b = e.target.closest(".item"); if (!b) return;
   const i = +b.dataset.i;
   go(i === cur && i !== 0 ? 0 : i, true);
+});
+panel.addEventListener("click", e=>{
+  const rm = e.target.closest(".readmore");
+  if (rm){ const open = rm.getAttribute("aria-expanded") === "true"; rm.parentElement.querySelectorAll(".more").forEach(p=>p.hidden = open); rm.setAttribute("aria-expanded", String(!open)); rm.textContent = open ? "read more" : "show less"; requestAnimationFrame(fitMask); }
 });
 panel.addEventListener("click", e=>{ const b = e.target.closest("[data-go]"); if (b){ go(+b.dataset.go, true); items[0].focus({preventScroll:true}); }});
 addEventListener("keydown", e=>{

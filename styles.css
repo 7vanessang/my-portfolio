@@ -100,12 +100,16 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 
 /* 03 journal: dated entries */
 .jour{display:grid;gap:0}
-.entry{display:grid;grid-template-columns:52px minmax(0,1fr);gap:12px;padding:12px 0;border-top:1px solid var(--hair)}
+.entry{display:grid;grid-template-columns:60px minmax(0,1fr);gap:12px;padding:12px 0;border-top:1px solid var(--hair)}
 .entry:last-of-type{border-bottom:1px solid var(--hair)}
 .entry .dt{font-variant-numeric:tabular-nums;color:var(--muted);line-height:1.25}
 .entry .dt b{display:block;font:300 22px/1 var(--serif);color:var(--ink);letter-spacing:0}
 .entry h3{margin:0 0 4px;font:400 max(17px,1.1vw)/1.15 var(--serif);letter-spacing:0}
 .entry p{margin:0;color:var(--ink2);line-height:1.4}
+.entry p+p{margin-top:.7em}
+.entry p a{color:var(--accent)}
+.entry .readmore{margin-top:6px;color:var(--accent);padding:4px 0}
+.entry .readmore:hover{text-decoration:underline;text-underline-offset:3px}
 
 /* 04 awards: a menu card, like the old courses */
 .aw{list-style:none;margin:0;padding:0;display:grid;gap:16px}
