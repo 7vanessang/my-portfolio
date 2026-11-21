@@ -20,7 +20,7 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 
 /* background */
 .bg{position:fixed;inset:0;pointer-events:none;opacity:0;animation:fade 1.2s ease-out .05s forwards}
-.bg .ph{position:absolute;inset:-40px;background-size:cover;background-position:center;filter:blur(9px) saturate(1.05);opacity:0;transform:scale(1.04);transition:opacity 1s ease,transform 2.4s var(--ease)}
+.bg .ph{position:absolute;inset:-40px;background-size:cover;background-position:center;filter:blur(6px) saturate(1.05);opacity:0;transform:scale(1.04);transition:opacity 1s ease,transform 2.4s var(--ease)}
 .bg .ph.on{opacity:.7;transform:scale(1)}
 .bg .glow{position:absolute;inset:0;background:
   radial-gradient(38% 34% at 38% 96%,var(--g-yellow),transparent 70%),
@@ -29,7 +29,7 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
   opacity:.55;mix-blend-mode:multiply}
 .bg .grain{position:absolute;inset:0;opacity:.5;mix-blend-mode:multiply;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .45 0 0 0 0 .42 0 0 0 0 .4 0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
 .bg .wash{position:absolute;inset:0;background:var(--bg);opacity:.18}
-.bg .veil{position:absolute;inset:0;background:linear-gradient(90deg,var(--bg) 0,color-mix(in srgb,var(--bg) 78%,transparent) 32%,transparent 50%);opacity:0;transition:opacity .9s ease}
+.bg .veil{position:absolute;inset:0;background:linear-gradient(90deg,var(--bg) 0,color-mix(in srgb,var(--bg) 78%,transparent) 32%,transparent 50%);opacity:.8;transition:opacity .9s ease}
 .open .bg .veil{opacity:.9}
 
 /* text column */
@@ -77,7 +77,7 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 .exp{list-style:none;margin:0;padding:0 0 0 16px;border-left:1px solid var(--hair)}
 .exp li{position:relative;padding:0 0 18px}
 .exp li::before{content:"";position:absolute;left:-19.5px;top:8px;width:6px;height:6px;border-radius:50%;background:var(--bg);border:1px solid var(--ink2)}
-.exp li:first-child::before{background:var(--accent);border-color:var(--accent)}
+.exp li[data-on]::before,.exp li:first-child::before{background:var(--accent);border-color:var(--accent)}
 .exp .d{color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
 .exp .role{font:300 max(20px,1.35vw)/1.05 var(--serif);letter-spacing:0;margin:0}
 .exp .role i{font-style:italic}

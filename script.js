@@ -20,18 +20,16 @@ const num = i => String(i).padStart(2,"0");
 /* ---------- section content ---------- */
 const EXP = [
   ["May 2027 · incoming","Summer Intern","Kraft Heinz","A 16-week internship in consumer packaged goods at a $42B company."],
-  ["Sep 2026 – present","Technology Consultant, pro bono","Google","Building commercialization and go-to-market recommendations for YouTube Canada: creator monetization trends, sponsorship budget allocation, and what holds advertisers back in the Canadian creator economy."],
-  ["Sep 2026 – present","Women's Advisory Program, Technology & Operations","RBC","Selected at a 5% acceptance rate for a 16-week professional development program in technology and financial services."],
+  ["Sep 2026 – present","Technology Consultant, pro bono","Google","Building commercialization and go-to-market recommendations for YouTube Canada: creator monetization trends, sponsorship budget allocation, and what holds advertisers back in the Canadian creator economy.",true],
+  ["Sep 2026 – Dec 2026","Women's Advisory Program, Technology & Operations","RBC","Selected at a 5% acceptance rate for a 16-week professional development program in technology and financial services."],
   ["May – Aug 2026","Founding Revenue Operations Intern","Alan","Selected at a 0.2% acceptance rate at a $9B health-tech insurer. Stress-tested SMB and enterprise outreach as a BDR, opening about $5.4M in potential ARPU; built LLM-based client sourcing in Salesforce, sales automations and RFP procedures; wrote external communications for a 10-year Wealthsimple co-selling partnership; ran Canada brand campaigns with 1M+ impressions."],
   ["Oct 2025 – Apr 2026","Marketing & Communications Intern","Spaces & Experiences, University of Toronto","Full production on 8 campaigns for university real estate, the bookstore and residences. Posts averaged 40K views, 4× the team benchmark."],
-  ["Sep 2025 – present","Chief of Staff, Business Recruitment","University of Toronto Formula Racing","Elected to run recruitment and internal affairs for 50+ members and 700+ recruits. Built a $500K+ external relations portfolio: $30K+ closed in business development, 11 partnerships, and socials grown from 0 to ~300K monthly views in 6 months."],
   ["2023","Intern","Kathryn Vogel Architect","Designed project cover pages, worked alongside the architects, and organized a clothing drive."],
   ["Sep 2022 – Jun 2025","Co-Founder & Team Captain","Westmount EV Race Team","Co-founded the city's first motorsport team and scaled it to 30+ members and 11 sponsors to deliver a competition electric vehicle. Owned every business function and was a core 3D technical contributor; one of the first students invited to speak at Siemens national town halls."]
 ];
 const GH = "https://github.com/7vanessang?tab=repositories";
 const PROJ = [
   ["polaris","Nov 2026","RBC WTAP 2026 hackathon","A first-line mentor for RBC early talent that turns what students ask into anonymized program insight.","typescript","https://github.com/7vanessang/rbc-wtap-2026-hackathon"],
-  ["metaphorical integral","Apr 2026","MAT133, project 4","Integrals told as a butterfly's metamorphosis.","html","https://github.com/7vanessang/metaphorical-integral"],
   ["retain","Mar 2026","MedSprint 2026 · 1st in track, 3rd overall","A medium-fidelity, tongue-controlled knee brace design.","c++","https://github.com/7vanessang/retain"],
   ["wordlock","Mar 2026","CSC108 assignment 1 · 100%","The game functions for a word-lock puzzle, written for U of T's intro to programming.","python","https://github.com/7vanessang/csc108_wordlock"],
   ["battleship","Mar 2026","CSC108 assignment 2 · 98%","The game functions for Battleship, tracking ships through hit, miss and sink.","python","https://github.com/7vanessang/csc108_battleship"],
@@ -57,7 +55,7 @@ const EDU = [
   ["2025","Westmount Secondary School","Specialist High Skills Major in Environmental Studies · Wildcat Award"],
   ["2024","Mohawk College","Aircraft Maintenance dual credit, completed in grade 11: advanced composites and aircraft engines, with honours"]
 ];
-const CAMPUS = ["UTFR Chief of Staff, Business Recruitment","UTFR External Relations Associate","UTCA Associate Consultant","Ivey Product Society"];
+const CAMPUS = ["UTFR Chief of Staff, Business Recruitment","UTFR External Relations Associate","UTCA Associate Consultant","IPS Summer Product Member"];
 const OFF = ["photography","dumpling folding","live music","motorsport","fitness & wellness"];
 
 let ri = 0; const r = () => `class="r" style="--i:${ri++}"`;
@@ -68,7 +66,8 @@ function head(i){
 const BODY = {
   "": () => {
     const paras = [
-      "welcome to my PORTFOLIO, a place to learn more. i want to make life that feels _interesting _and _meaningful, not just impressive.",
+      "welcome to my PORTFOLIO, a place to learn more.",
+      "i want to make life that feels _interesting _and _meaningful, not just impressive.",
       "in my work, i strive to be thoughtful, driven person who wants to build things that matter while staying open-hearted toward the people involved. it is _sincerely, nice to meet you"
     ];
     let k = 0;
@@ -77,7 +76,7 @@ const BODY = {
       return `<span${it?' class="it"':""} style="animation-delay:${1100+(k++)*22}ms">${esc(it?w.slice(1):w)}</span>`;
     }).join(" ")}</p>`).join("");
   },
-  experience: i => head(i) + `<ol class="exp">${EXP.map(e=>`<li ${r()}><div class="role">${cap(e[1])}</div><div class="meta"><span class="org">${esc(e[2])}</span><span class="d">${esc(e[0])}</span></div><p>${esc(e[3])}</p></li>`).join("")}</ol>`,
+  experience: i => head(i) + `<ol class="exp">${EXP.map(e=>`<li ${r()}${e[4]?' data-on':""}><div class="role">${cap(e[1])}</div><div class="meta"><span class="org">${esc(e[2])}</span><span class="d">${esc(e[0])}</span></div><p>${esc(e[3])}</p></li>`).join("")}</ol>`,
   projects: i => head(i) + `<a class="ghall r" style="--i:${ri++}" href="${GH}" target="_blank" rel="noreferrer">all repositories on github ↗</a><div class="proj">${PROJ.map(p=>`<article class="card r" style="--i:${ri++}"><div class="hd"><h3>${esc(p[0])}</h3><span class="y">${esc(p[1])}</span></div>${p[2]?`<span class="badge">${esc(p[2])}</span>`:""}<p>${esc(p[3])}</p><span class="tags">${esc(p[4])}</span>${p[5]?` · <a class="gh" href="${esc(p[5])}" target="_blank" rel="noreferrer">repo ↗</a>`:""}</article>`).join("")}</div>`,
   journal: i => head(i) + (JOUR.length ? "" : `<p class="note r" style="--i:${ri++};margin:0">nothing here yet. first entry coming soon.</p>`) + `<div class="jour">${JOUR.map(j=>`<article class="entry r" style="--i:${ri++}"><div class="dt"><b>${esc(j[0])}</b>${esc(j[1])}</div><div><h3>${esc(j[2])}</h3><p>${esc(j[3])}</p></div></article>`).join("")}</div>`,
   awards: i => head(i) + `<ol class="aw">${AW.map((a,k)=>`<li ${r()}><span class="n">${num(k+1)}</span><div><div class="t">${a[3]?`<a href="${esc(a[3])}" target="_blank" rel="noreferrer">${cap(a[0])}<span class="arr"> ↗</span></a>`:cap(a[0])}</div><div class="s">${esc(a[1])}</div></div><span class="yr">${esc(a[2])}</span></li>`).join("")}</ol>`,
