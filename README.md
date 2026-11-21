@@ -1,4 +1,4 @@
-# vanessa ng - portfolio
+# my portfolio
 
 a place to learn more about me: my work, projects, and what i care about. live at [vanessa-ng.vercel.app](https://vanessa-ng.vercel.app).
 
