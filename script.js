@@ -3,14 +3,14 @@
 
 /* Sections around the wheel. Index 0 is the name (intro). Add or remove entries freely: the wheel re-spaces itself. */
 const S = [
-  {slug:"", img:"images/intro.webp", name:true},
-  {slug:"experience", img:"images/experience.webp", t:"experience", sub:"kraft heinz / google / {alan}"},
-  {slug:"projects", img:"images/projects.webp", t:"projects", sub:"{polaris} / retain / immi"},
-  {slug:"journal", img:"images/journal.webp", t:"journal", sub:"notes / lessons / {drafts}"},
-  {slug:"awards", img:"images/awards.webp", t:"awards", sub:"{hackathons} / waterloo / skills ontario"},
-  {slug:"toolkit", img:"images/toolkit.webp", t:"toolkit", sub:"sql / {python} / figma"},
-  {slug:"education", img:"images/education.webp", t:"education", sub:"{rotman} / strategy / innovation"},
-  {slug:"off-duty", img:"images/off-duty.webp", t:"off duty", sub:"{photography} / dumplings / live music"}
+  {slug:"", img:"images/intro.webp?v=2", name:true},
+  {slug:"experience", img:"images/experience.webp?v=2", t:"experience", sub:"kraft heinz / google / {alan}"},
+  {slug:"projects", img:"images/projects.webp?v=2", t:"projects", sub:"{polaris} / retain / immi"},
+  {slug:"journal", img:"images/journal.webp?v=2", t:"journal", sub:"notes / lessons / {drafts}"},
+  {slug:"awards", img:"images/awards.webp?v=2", t:"awards", sub:"{hackathons} / waterloo / skills ontario"},
+  {slug:"toolkit", img:"images/toolkit.webp?v=2", t:"toolkit", sub:"sql / {python} / figma"},
+  {slug:"education", img:"images/education.webp?v=2", t:"education", sub:"{rotman} / strategy / innovation"},
+  {slug:"off-duty", img:"images/off-duty.webp?v=2", t:"off duty", sub:"{photography} / dumplings / live music"}
 ];
 
 const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
