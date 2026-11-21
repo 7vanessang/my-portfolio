@@ -224,7 +224,7 @@ const hint = document.createElement("div");
 hint.className = "hint"; hint.setAttribute("aria-hidden", "true");
 hint.innerHTML = `<div class="hb"><svg class="hsvg"><path class="hp"/><path class="hh"/></svg><button class="ht" type="button" tabindex="-1">click here</button></div>`;
 document.body.appendChild(hint);
-function scheduleHint(){ if (hintDone || hintTimer) return; hintTimer = setTimeout(showHint, INTRO_END + 4000); }
+function scheduleHint(){ if (hintDone || hintTimer) return; hintTimer = setTimeout(showHint, INTRO_END + 3000); }
 function showHint(){
   hintTimer = 0;
   if (hintDone || cur !== 0) return;
