@@ -181,7 +181,7 @@ function render(i){
   panel.scrollTop = 0;
   requestAnimationFrame(fitMask);
 }
-function fitMask(){ panel.classList.toggle("fadeb", panel.scrollHeight - panel.clientHeight - panel.scrollTop > 4); }
+function fitMask(){ panel.classList.toggle("fadeb", panel.scrollHeight - panel.clientHeight - panel.scrollTop > 4); panel.classList.toggle("fadet", panel.scrollTop > 4); }
 panel.addEventListener("scroll", fitMask, {passive:true});
 addEventListener("resize", fitMask);
 
