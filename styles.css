@@ -22,11 +22,6 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 .bg{position:fixed;inset:0;pointer-events:none;opacity:0;animation:fade 1.2s ease-out .05s forwards}
 .bg .ph{position:absolute;inset:-40px;background-size:cover;background-position:center;filter:blur(6px) saturate(1.05);opacity:0;transform:scale(1.04);transition:opacity 1s ease,transform 2.4s var(--ease)}
 .bg .ph.on{opacity:.7;transform:scale(1)}
-.bg .glow{position:absolute;inset:0;background:
-  radial-gradient(38% 34% at 38% 96%,var(--g-yellow),transparent 70%),
-  radial-gradient(30% 40% at 0% 100%,var(--g-red),transparent 72%),
-  radial-gradient(34% 30% at 78% 88%,var(--g-green),transparent 70%);
-  opacity:.55;mix-blend-mode:multiply}
 .bg .grain{position:absolute;inset:0;opacity:.5;mix-blend-mode:multiply;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .45 0 0 0 0 .42 0 0 0 0 .4 0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
 .bg .wash{position:absolute;inset:0;background:var(--bg);opacity:.18}
 .bg .veil{position:absolute;inset:0;background:linear-gradient(90deg,var(--bg) 0,color-mix(in srgb,var(--bg) 78%,transparent) 32%,transparent 50%);opacity:.8;transition:opacity .9s ease}
