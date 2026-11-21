@@ -186,6 +186,7 @@ function render(i){
     c.classList.remove("show"); void c.offsetWidth;
     c.style.setProperty("--d", INTRO_END + "ms");
     c.classList.add("show");
+    scheduleHint();
   }
   panel.scrollTop = 0;
   requestAnimationFrame(fitMask);
@@ -198,6 +199,7 @@ function go(i, push){
   i = ((i % S.length) + S.length) % S.length;
   if (i === cur) return;
   cur = i;
+  if (i !== 0 && typeof hideHint === "function") hideHint();
   const target = -i*step;
   let delta = ((target - angle) % 360 + 540) % 360 - 180;
   angle += delta;
@@ -215,6 +217,43 @@ function go(i, push){
     else { try { history.replaceState(null, "", location.pathname + location.search); } catch(e){ location.hash = ""; } }
   }
 }
+
+/* "click here" hint: once per visit, only on the name page, if nobody has opened a section */
+let hintDone = false, hintTimer = 0;
+const hint = document.createElement("div");
+hint.className = "hint"; hint.setAttribute("aria-hidden", "true");
+hint.innerHTML = `<div class="hb"><svg class="hsvg"><path class="hp"/><path class="hh"/></svg><button class="ht" type="button" tabindex="-1">click here</button></div>`;
+document.body.appendChild(hint);
+function scheduleHint(){ if (hintDone || hintTimer) return; hintTimer = setTimeout(showHint, INTRO_END + 6000); }
+function showHint(){
+  hintTimer = 0;
+  if (hintDone || cur !== 0) return;
+  const r = items[1].querySelector(".ti").getBoundingClientRect();
+  const c = {x: r.left + r.width/2, y: r.top + r.height/2};
+  const phone = mq.matches;
+  const tx = phone ? c.x - 95 : c.x - 60, ty = phone ? c.y - 125 : c.y + 125;
+  const ht = hint.querySelector(".ht"); ht.style.left = tx + "px"; ht.style.top = ty + "px";
+  const s = {x: tx + (phone ? 20 : 6), y: ty + (phone ? 12 : -16)};
+  const L = Math.hypot(c.x - s.x, c.y - s.y), ux = (c.x - s.x)/L, uy = (c.y - s.y)/L;
+  const gap = phone ? 46 : 52, e = {x: c.x - ux*gap, y: c.y - uy*gap};
+  const m = {x: (s.x + e.x)/2 - uy*22, y: (s.y + e.y)/2 + ux*22};
+  const hp = hint.querySelector(".hp"); hp.setAttribute("d", `M${s.x} ${s.y} Q${m.x} ${m.y} ${e.x} ${e.y}`);
+  let ax = e.x - m.x, ay = e.y - m.y; const al = Math.hypot(ax, ay); ax /= al; ay /= al;
+  const head = a => { const cs = Math.cos(a), sn = Math.sin(a); return `${e.x - 9*(ax*cs - ay*sn)} ${e.y - 9*(ax*sn + ay*cs)}`; };
+  hint.querySelector(".hh").setAttribute("d", `M${head(0.5)} L${e.x} ${e.y} L${head(-0.5)}`);
+  hint.style.setProperty("--len", hp.getTotalLength() + 1);
+  hint.style.setProperty("--bx", (ux*4).toFixed(1) + "px"); hint.style.setProperty("--by", (uy*4).toFixed(1) + "px");
+  hint.classList.add("on");
+}
+function hideHint(){
+  hintDone = true; clearTimeout(hintTimer); hintTimer = 0;
+  if (hint.classList.contains("on")){ hint.classList.add("off"); setTimeout(()=>hint.classList.remove("on", "off"), 320); }
+}
+const hintOff = e => { if (hint.classList.contains("on") && !(e.target.closest && e.target.closest(".ht"))) hideHint(); };
+addEventListener("pointerdown", hintOff, true);
+["keydown", "wheel", "touchmove", "resize"].forEach(t => addEventListener(t, hintOff, {passive:true}));
+panel.addEventListener("scroll", hintOff, {passive:true});
+hint.querySelector(".ht").addEventListener("click", ()=>{ hideHint(); go(1, true); });
 
 rot.addEventListener("click", e=>{
   const b = e.target.closest(".item"); if (!b) return;
