@@ -107,9 +107,9 @@ function head(i){
 const BODY = {
   "": () => {
     const paras = [
-      "welcome to my PORTFOLIO, a place to learn more.",
-      "i want to make life that feels _interesting _and _meaningful, not just impressive.",
-      "in my work, i strive to be thoughtful, driven person who wants to build things that matter while staying open-hearted toward the people involved. it is _sincerely, nice to meet you"
+      "welcome to my PORTFOLIO, a place that shows what I’ve done and also gives a feel for who I am and how I think.",
+      "i want to make life that feels _interesting _and _meaningful.",
+      "to me, it means being thoughtful and driven; and to build things that matter while staying open-hearted toward the people involved."
     ];
     let k = 0;
     return paras.map(t=>`<p class="intro">${t.split(" ").map(w=>{
