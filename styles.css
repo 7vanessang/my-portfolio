@@ -49,6 +49,8 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 
 /* contact box */
 .open .contact{display:none}
+.contact{opacity:0;transform:translateY(8px)}
+.contact.show{animation:rise .6s var(--ease) forwards;animation-delay:var(--d,0ms)}
 .contact{display:flex;flex-direction:column;gap:4px;padding:8px;background:rgba(255,255,255,.8);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);flex:none}
 .flip{position:relative;display:block;height:1em;overflow:hidden;white-space:nowrap}
 .flip>span{display:flex;flex-direction:column;transition:transform .48s var(--ease)}

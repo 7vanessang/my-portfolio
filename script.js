@@ -112,10 +112,12 @@ const BODY = {
       "to me, that means being thoughtful and driven; and to build things that matter while staying open-hearted toward the people involved."
     ];
     let k = 0;
-    return paras.map(t=>`<p class="intro">${t.split(" ").map(w=>{
+    const html = paras.map(t=>`<p class="intro">${t.split(" ").map(w=>{
       const it = w[0]==="_";
       return `<span${it?' class="it"':""} style="animation-delay:${1100+(k++)*22}ms">${esc(it?w.slice(1):w)}</span>`;
     }).join(" ")}</p>`).join("");
+    INTRO_END = 1100 + (k - 1) * 22 + 220;
+    return html;
   },
   experience: i => head(i) + `<ol class="exp">${EXP.map(e=>`<li ${r()}${e[4]?' data-on':""}><div class="role">${cap(e[1])}</div><div class="meta"><span class="org">${esc(e[2])}</span><span class="d">${esc(e[0])}</span></div><p>${esc(e[3])}</p></li>`).join("")}</ol>`,
   projects: i => head(i) + `<a class="ghall r" style="--i:${ri++}" href="${GH}" target="_blank" rel="noreferrer">all repositories on github ↗</a><div class="proj">${PROJ.map(p=>`<article class="card r" style="--i:${ri++}"><div class="hd"><h3>${esc(p[0])}</h3><span class="y">${esc(p[1])}</span></div>${p[2]?`<span class="badge">${esc(p[2])}</span>`:""}<p>${esc(p[3])}</p><span class="tags">${esc(p[4])}</span>${p[5]?` · <a class="gh" href="${esc(p[5])}" target="_blank" rel="noreferrer">repo ↗</a>`:""}</article>`).join("")}</div>`,
@@ -175,9 +177,16 @@ if (!reduce) setInterval(scramble, 140);
 const panel = document.getElementById("panel");
 let cur = -1, angle = 0, first = true;
 
+let INTRO_END = 0;
 function render(i){
   ri = 2;
   panel.innerHTML = BODY[S[i].slug](i);
+  if (i === 0){
+    const c = document.getElementById("contact");
+    c.classList.remove("show"); void c.offsetWidth;
+    c.style.setProperty("--d", INTRO_END + "ms");
+    c.classList.add("show");
+  }
   panel.scrollTop = 0;
   requestAnimationFrame(fitMask);
 }
