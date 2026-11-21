@@ -43,24 +43,33 @@ function inlineMd(t){
   return esc(t)
     .replace(/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g, '<a href="$2" target="_blank" rel="noreferrer">$1</a>')
     .replace(/\*\*([^*]+)\*\*/g, "<b>$1</b>")
-    .replace(/\*([^*]+)\*/g, "<i>$1</i>");
+    .replace(/\*([^*]+)\*/g, "<i>$1</i>")
+    .replace(/`([^`]+)`/g, "<code>$1</code>");
+}
+function blocksOf(body){
+  return body.split(/\n\s*\n/).map(b=>b.trim()).filter(Boolean).map(b=>{
+    const h = b.match(/^#{2,4}\s+(.+)$/);
+    if (h && !b.includes("\n")) return {t:"h", html:inlineMd(h[1])};
+    const lines = b.split("\n");
+    if (lines.every(l=>/^\s*[-*]\s+/.test(l))) return {t:"ul", html:lines.map(l=>`<li>${inlineMd(l.replace(/^\s*[-*]\s+/,""))}</li>`).join("")};
+    return {t:"p", html:inlineMd(lines.join(" "))};
+  });
 }
 function parseJournal(md){
   md = md.replace(/<!--[\s\S]*?-->/g, "");
-  return md.split(/^## /m).slice(1).map(block=>{
+  return md.split(/^## (?=\d{4}-\d{2}-\d{2})/m).slice(1).map(block=>{
     const nl = block.indexOf("\n");
     const head = (nl < 0 ? block : block.slice(0, nl)).trim();
-    const body = nl < 0 ? "" : block.slice(nl + 1).trim();
+    const body = nl < 0 ? "" : block.slice(nl + 1);
     const m = head.match(/^(\d{4})-(\d{2})-(\d{2})\s*[·|\-–—:]\s*(.+)$/);
     if (!m) return null;
-    const paras = body.split(/\n\s*\n/).map(p=>p.trim().replace(/\n/g," ")).filter(Boolean);
-    return {key:m[1]+m[2]+m[3], y:m[1], mo:MONTHS[+m[2]-1]||"", d:String(+m[3]), title:m[4].trim(), paras};
+    return {key:m[1]+m[2]+m[3], y:m[1], mo:MONTHS[+m[2]-1]||"", d:String(+m[3]), title:m[4].trim(), blocks:blocksOf(body)};
   }).filter(Boolean).sort((a,b)=>b.key.localeCompare(a.key));
 }
 function journalHTML(){
   if (!JOUR) return `<p class="note">loading…</p>`;
   if (!JOUR.length) return `<p class="note r" style="--i:2;margin:0">nothing here yet. first entry coming soon.</p>`;
-  return `<div class="jour">${JOUR.map((j,k)=>`<article class="entry r" style="--i:${k+2}"><div class="dt"><b>${esc(j.d)}</b>${esc(j.mo)} ${esc(j.y)}</div><div><h3>${esc(j.title)}</h3>${j.paras.map((p,n)=>`<p${n?' class="more" hidden':""}>${inlineMd(p)}</p>`).join("")}${j.paras.length>1?`<button class="readmore" type="button" aria-expanded="false">read more</button>`:""}</div></article>`).join("")}</div>`;
+  return `<div class="jour">${JOUR.map((j,k)=>`<article class="entry r" style="--i:${k+2}"><div class="dt"><b>${esc(j.d)}</b>${esc(j.mo)} ${esc(j.y)}</div><div><h3>${esc(j.title)}</h3>${j.blocks.map((b,n)=>{ const tag = b.t==="h" ? "h4" : b.t; return `<${tag}${n?' class="more" hidden':""}>${b.html}</${tag}>`; }).join("")}${j.blocks.length>1?`<button class="readmore" type="button" aria-expanded="false">read more</button>`:""}</div></article>`).join("")}</div>`;
 }
 function loadJournal(){
   if (JOUR) return;
