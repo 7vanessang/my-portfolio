@@ -73,8 +73,8 @@ const AW = [
   ["MedSprint, McMaster","1st in track, 3rd overall · for retain","2026",""],
   ["DeltaHacks 12","Best Use of ElevenLabs, an MLH award · for immi","2026","https://devpost.com/software/immi-325jt0"],
   ["Dennis Weishar Engineering Design Award","University of Waterloo EV Challenge · top prize across all university and high school teams","2024","https://uwaterloo.ca/electric-vehicle-challenge/2024-race-results"],
-  ["Mechanical CAD, provincial top 15","Skills Ontario","2023","https://skillsontario.com/wp-content/uploads/1a2023_SOC_Results.pdf"],
-  ["Guest speaker, Siemens national town halls","the first students invited","2024",""]
+  ["Guest speaker, Siemens national town halls","the first students invited","2024",""],
+  ["Mechanical CAD, provincial top 15","Skills Ontario","2023","https://skillsontario.com/wp-content/uploads/1a2023_SOC_Results.pdf"]
 ];
 const TK = [
   ["languages",["SQL","Python","JavaScript","HTML","CSS"]],
@@ -119,7 +119,7 @@ const BODY = {
 
 /* ---------- build photos + wheel ---------- */
 const photos = document.getElementById("photos");
-photos.innerHTML = S.map((s,i)=>`<div class="ph${i?"":" on"}" style="background-image:url('${s.img}')"></div>`).join("");
+photos.innerHTML = S.map((s,i)=>`<div class="ph ph-${s.slug||"intro"}${i?"":" on"}" style="background-image:url('${s.img}')"></div>`).join("");
 const phs = [...photos.children];
 
 const rot = document.getElementById("rot");

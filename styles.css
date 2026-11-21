@@ -31,6 +31,7 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 .bg .wash{position:absolute;inset:0;background:var(--bg);opacity:.18}
 .bg .veil{position:absolute;inset:0;background:linear-gradient(90deg,var(--bg) 0,color-mix(in srgb,var(--bg) 78%,transparent) 32%,transparent 50%);opacity:.8;transition:opacity .9s ease}
 .open .bg .veil{opacity:.9}
+@media (min-width:900px){.bg .ph-journal{background-position:center 28%}}
 
 /* text column */
 .ui{position:fixed;z-index:20;top:clamp(32px,6.5vh,72px);left:clamp(20px,5.5vw,80px);bottom:clamp(24px,4vh,48px);width:clamp(280px,30vw,440px);display:flex;flex-direction:column;gap:28px;pointer-events:none}
