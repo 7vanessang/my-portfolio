@@ -4,17 +4,18 @@
 /* Sections around the wheel. Index 0 is the name (intro). Add or remove entries freely: the wheel re-spaces itself. */
 const S = [
   {slug:"", img:"images/intro.webp?v=2", name:true},
-  {slug:"experience", img:"images/experience.webp?v=2", t:"experience", sub:"kraft heinz / google / {alan}"},
-  {slug:"projects", img:"images/projects.webp?v=2", t:"projects", sub:"{polaris} / retain / immi"},
-  {slug:"journal", img:"images/journal.webp?v=2", t:"journal", sub:"notes / lessons / {drafts}"},
-  {slug:"awards", img:"images/awards.webp?v=2", t:"awards", sub:"{hackathons} / waterloo / skills ontario"},
-  {slug:"toolkit", img:"images/toolkit.webp?v=2", t:"toolkit", sub:"sql / {python} / figma"},
-  {slug:"education", img:"images/education.webp?v=2", t:"education", sub:"{rotman} / strategy / innovation"},
-  {slug:"off-duty", img:"images/off-duty.webp?v=2", t:"off duty", sub:"{photography} / dumplings / live music"}
+  {slug:"experience", img:"images/experience.webp?v=2", t:"experience", sub:"companies: kraft heinz / google / alan", tip:"my roles, from Kraft Heinz to Google"},
+  {slug:"projects", img:"images/projects.webp?v=2", t:"projects", sub:"{polaris} / retain / immi", tip:"things I’ve built, with links to the code"},
+  {slug:"journal", img:"images/journal.webp?v=2", t:"journal", sub:"notes / lessons / {drafts}", tip:"longer thoughts and write-ups"},
+  {slug:"awards", img:"images/awards.webp?v=2", t:"awards", sub:"from: deltahacks / medsprint / waterloo", tip:"hackathon wins and design awards"},
+  {slug:"toolkit", img:"images/toolkit.webp?v=2", t:"toolkit", sub:"sql / {python} / figma", tip:"languages, tools and strengths"},
+  {slug:"education", img:"images/education.webp?v=2", t:"education", sub:"schools: {rotman} / westmount / mohawk", tip:"where I’ve studied"},
+  {slug:"off-duty", img:"images/off-duty.webp?v=2", t:"off duty", sub:"{photography} / dumplings / live music", tip:"what I do for fun"}
 ];
 
 const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const cap = t => `<i>${esc(t[0])}</i>${esc(t.slice(1))}`;
+const capT = t => `<i>${esc(t[0].toUpperCase())}</i>${esc(t.slice(1))}`;
 const num = i => String(i).padStart(2,"0");
 
 /* ---------- section content ---------- */
@@ -69,18 +70,19 @@ function parseJournal(md){
 function journalHTML(){
   if (!JOUR) return `<p class="note">loading…</p>`;
   if (!JOUR.length) return `<p class="note r" style="--i:2;margin:0">nothing here yet. first entry coming soon.</p>`;
-  return `<div class="jour">${JOUR.map((j,k)=>`<article class="entry r" style="--i:${k+2}"><div class="dt"><b>${esc(j.d)}</b>${esc(j.mo)} ${esc(j.y)}</div><div><h3>${esc(j.title)}</h3>${j.blocks.map((b,n)=>{ const tag = b.t==="h" ? "h4" : b.t; return `<${tag}${n?' class="more" hidden':""}>${b.html}</${tag}>`; }).join("")}${j.blocks.length>1?`<button class="readmore" type="button" aria-expanded="false">read more</button>`:""}</div></article>`).join("")}</div>`;
+  return `<div class="jour">${JOUR.map((j,k)=>`<article class="entry r" style="--i:${k+2}"><div class="dt">${esc(j.mo)} ${esc(j.d)}, ${esc(j.y)}</div><div><h3>${capT(j.title)}</h3>${j.blocks.map((b,n)=>{ const tag = b.t==="h" ? "h4" : b.t; return `<${tag}${n?' class="more" hidden':""}>${b.html}</${tag}>`; }).join("")}${j.blocks.length>1?`<button class="readmore" type="button" aria-expanded="false">read more</button>`:""}</div></article>`).join("")}</div>`;
 }
 function loadJournal(){
   if (JOUR) return;
+  if (typeof window.__JOURNAL_MD === "string"){ JOUR = parseJournal(window.__JOURNAL_MD); return; }
   fetch("journal.md", {cache:"no-cache"})
     .then(r => r.ok ? r.text() : "")
     .catch(() => "")
     .then(t => { JOUR = parseJournal(t); const box = document.getElementById("jbox"); if (box){ box.innerHTML = journalHTML(); requestAnimationFrame(fitMask); } });
 }
 const AW = [
-  ["MedSprint, McMaster","1st in track, 3rd overall · for retain","2026",""],
   ["DeltaHacks 12","Best Use of ElevenLabs, an MLH award · for immi","2026","https://devpost.com/software/immi-325jt0"],
+  ["MedSprint, McMaster","1st in track, 3rd overall · for retain","2026",""],
   ["Dennis Weishar Engineering Design Award","University of Waterloo EV Challenge · top prize across all university and high school teams","2024","https://uwaterloo.ca/electric-vehicle-challenge/2024-race-results"],
   ["Guest speaker, Siemens national town halls","the first students invited","2024",""],
   ["Mechanical CAD, provincial top 15","Skills Ontario","2023","https://skillsontario.com/wp-content/uploads/1a2023_SOC_Results.pdf"]
@@ -101,8 +103,8 @@ const OFF = ["photography","dumpling folding","live music","motorsport","fitness
 
 let ri = 0; const r = () => `class="r" style="--i:${ri++}"`;
 function head(i){
-  return `<button class="back r" style="--i:0" type="button" data-go="0">← back</button>
-  <div class="sh r" style="--i:1"><span class="n">${num(i)}</span><h2>${cap(S[i].t)}</h2></div>`;
+  return `<nav class="crumb r" style="--i:0" aria-label="You are here"><button type="button" data-go="0">vanessa ng</button><span class="sl">/</span><span>${esc(S[i].t)}</span><span id="crumbItem"></span></nav>
+  <div class="sh r" style="--i:1"><span class="n">${num(i)}</span><h2>${capT(S[i].t)}</h2></div>`;
 }
 const BODY = {
   "": () => {
@@ -119,13 +121,13 @@ const BODY = {
     INTRO_END = 1100 + (k - 1) * 22 + 220;
     return html;
   },
-  experience: i => head(i) + `<ol class="exp">${EXP.map(e=>`<li ${r()}${e[4]?' data-on':""}><div class="role">${cap(e[1])}</div><div class="meta"><span class="org">${esc(e[2])}</span><span class="d">${esc(e[0])}</span></div><p>${esc(e[3])}</p></li>`).join("")}</ol>`,
-  projects: i => head(i) + `<a class="ghall r" style="--i:${ri++}" href="${GH}" target="_blank" rel="noreferrer">all repositories on github ↗</a><div class="proj">${PROJ.map(p=>`<article class="card r" style="--i:${ri++}"><div class="hd"><h3>${esc(p[0])}</h3><span class="y">${esc(p[1])}</span></div>${p[2]?`<span class="badge">${esc(p[2])}</span>`:""}<p>${esc(p[3])}</p><span class="tags">${esc(p[4])}</span>${p[5]?` · <a class="gh" href="${esc(p[5])}" target="_blank" rel="noreferrer">repo ↗</a>`:""}</article>`).join("")}</div>`,
+  experience: i => head(i) + `<p class="hintline r" style="--i:${ri++}">click a role to read more</p><ol class="exp">${EXP.map((e,k)=>`<li ${r()}><button class="row" type="button" aria-expanded="false" aria-controls="xd${k}" data-role="${esc(e[1])}"><span class="role">${capT(e[1])}</span><span class="meta"><span class="org">${esc(e[2])}</span><span class="d">${esc(e[0])}</span></span><span class="chev" aria-hidden="true"></span></button><div class="xd" id="xd${k}" hidden><p>${esc(e[3])}</p></div></li>`).join("")}</ol>`,
+  projects: i => head(i) + `<a class="ghall r" style="--i:${ri++}" href="${GH}" target="_blank" rel="noreferrer">all repositories on github ↗</a><div class="proj">${PROJ.map(p=>`<article class="card r" style="--i:${ri++}"><div class="hd"><h3>${capT(p[0])}</h3><span class="y">${esc(p[1])}</span></div>${p[2]?`<span class="badge">${esc(p[2])}</span>`:""}<p>${esc(p[3])}</p><span class="tags">${esc(p[4])}</span>${p[5]?` · <a class="gh" href="${esc(p[5])}" target="_blank" rel="noreferrer">repo ↗</a>`:""}</article>`).join("")}</div>`,
   journal: i => { loadJournal(); return head(i) + `<div id="jbox">${journalHTML()}</div>`; },
-  awards: i => head(i) + `<ol class="aw">${AW.map((a,k)=>`<li ${r()}><span class="n">${num(k+1)}</span><div><div class="t">${a[3]?`<a href="${esc(a[3])}" target="_blank" rel="noreferrer">${cap(a[0])}<span class="arr"> ↗</span></a>`:cap(a[0])}</div><div class="s">${esc(a[1])}</div></div><span class="yr">${esc(a[2])}</span></li>`).join("")}</ol>`,
+  awards: i => head(i) + `<ol class="aw">${AW.map((a,k)=>`<li ${r()}><span class="n">${num(k+1)}</span><div><div class="t">${a[3]?`<a href="${esc(a[3])}" target="_blank" rel="noreferrer">${capT(a[0])}<span class="arr"> ↗</span></a>`:capT(a[0])}</div><div class="s">${esc(a[1])}</div></div><span class="yr">${esc(a[2])}</span></li>`).join("")}</ol>`,
   toolkit: i => head(i) + `<div class="tk">${TK.map(g=>`<div ${r()}><p class="lab">${esc(g[0])}</p><div class="chips">${g[1].map(c=>`<span class="chip">${esc(c)}</span>`).join("")}</div></div>`).join("")}</div>`,
-  education: i => head(i) + `<div class="edu">${EDU.map(e=>`<div class="school r" style="--i:${ri++}"><span class="big">${esc(e[0])}</span><div><h3>${esc(e[1])}</h3><p>${esc(e[2])}</p>${e[3]?`<p class="lab" style="margin:12px 0 7px;color:var(--muted)">on campus</p><div class="chips">${CAMPUS.map(c=>`<span class="chip">${esc(c)}</span>`).join("")}</div>`:""}</div></div>`).join("")}</div>`,
-  "off-duty": i => head(i) + `<p class="off r" style="--i:${ri++}">${OFF.map(o=>`<span>${esc(o)}</span>`).join('<span class="sep"> / </span>')}</p>`
+  education: i => head(i) + `<div class="edu">${EDU.map(e=>`<div class="school r" style="--i:${ri++}"><span class="big">${esc(e[0])}</span><div><h3>${capT(e[1])}</h3><p>${esc(e[2])}</p>${e[3]?`<p class="lab" style="margin:12px 0 7px;color:var(--muted)">on campus</p><div class="chips">${CAMPUS.map(c=>`<span class="chip">${esc(c)}</span>`).join("")}</div>`:""}</div></div>`).join("")}</div>`,
+  "off-duty": i => head(i) + `<ul class="off">${OFF.map(o=>`<li ${r()}>${esc(o)}</li>`).join("")}</ul>`
 };
 
 /* ---------- build photos + wheel ---------- */
@@ -143,6 +145,18 @@ rot.innerHTML = S.map((s,i)=>{
   return `<button class="item" data-i="${i}" type="button" aria-label="${esc(s.t)}"><span class="in2 pop" style="--d:${d}ms"><span class="lay"><span class="n">${num(i)}</span><span class="tx"><span class="ti">${cap(s.t)}</span><span class="su">${subHTML(s.sub)}</span></span></span></span></button>`;
 }).join("");
 const items = [...rot.children];
+const wheelEl = document.getElementById("wheel");
+wheelEl.insertAdjacentHTML("beforeend", `<div class="hub" aria-hidden="true"><span class="hub-t">my portfolio</span><span class="hub-s">pick a section to turn the wheel</span></div>`);
+items.forEach((el,i)=>{ if (S[i].tip) el.dataset.tip = S[i].tip; });
+const tip = document.createElement("div"); tip.className = "tip"; tip.setAttribute("role","tooltip"); document.body.appendChild(tip);
+const canHover = matchMedia("(hover: hover)");
+rot.addEventListener("pointerover", e=>{
+  const b = e.target.closest(".item"); if (!b || !canHover.matches || !b.dataset.tip || b.classList.contains("act")) return;
+  tip.textContent = b.dataset.tip; tip.classList.add("on");
+});
+rot.addEventListener("pointermove", e=>{ if (tip.classList.contains("on")){ tip.style.left = (e.clientX + 14) + "px"; tip.style.top = (e.clientY + 18) + "px"; } });
+rot.addEventListener("pointerout", e=>{ const b = e.target.closest(".item"); if (b && !b.contains(e.relatedTarget)) tip.classList.remove("on"); });
+rot.addEventListener("click", ()=> tip.classList.remove("on"));
 const step = 360 / S.length;
 const mq = matchMedia("(max-width: 899px)");
 const R = 34.9;
@@ -186,6 +200,10 @@ function render(i){
     c.classList.remove("show"); void c.offsetWidth;
     c.style.setProperty("--d", INTRO_END + "ms");
     c.classList.add("show");
+    const q = document.getElementById("quick");
+    q.classList.remove("show"); void q.offsetWidth;
+    q.style.setProperty("--d", (INTRO_END + 350) + "ms");
+    q.classList.add("show");
     scheduleHint();
   }
   panel.scrollTop = 0;
@@ -264,6 +282,19 @@ rot.addEventListener("click", e=>{
   go(i === cur && i !== 0 ? 0 : i, true);
 });
 panel.addEventListener("click", e=>{
+  const row = e.target.closest(".exp .row"); if (!row) return;
+  const open = row.getAttribute("aria-expanded") !== "true";
+  row.setAttribute("aria-expanded", String(open));
+  row.parentElement.toggleAttribute("data-open", open);
+  document.getElementById(row.getAttribute("aria-controls")).hidden = !open;
+  const crumb = document.getElementById("crumbItem");
+  if (crumb){
+    const last = [...panel.querySelectorAll('.exp .row[aria-expanded="true"]')].pop();
+    crumb.innerHTML = last ? `<span class="sl">/</span>${esc(last.dataset.role.toLowerCase())}` : "";
+  }
+  requestAnimationFrame(fitMask);
+});
+panel.addEventListener("click", e=>{
   const rm = e.target.closest(".readmore");
   if (rm){ const open = rm.getAttribute("aria-expanded") === "true"; rm.parentElement.querySelectorAll(".more").forEach(p=>p.hidden = open); rm.setAttribute("aria-expanded", String(!open)); rm.textContent = open ? "read more" : "show less"; requestAnimationFrame(fitMask); }
 });
@@ -274,6 +305,7 @@ addEventListener("keydown", e=>{
   else if (e.key==="ArrowLeft"||e.key==="ArrowUp"){ go(cur-1,true); e.preventDefault(); }
   else if (e.key==="Escape"){ go(0,true); }
 });
+document.getElementById("quick").addEventListener("click", e=>{ const a = e.target.closest("[data-go]"); if (a){ e.preventDefault(); go(+a.dataset.go, true); } });
 function fromHash(){ const s = location.hash.slice(1); const i = S.findIndex(x=>x.slug===s); go(i>0?i:0, false); }
 addEventListener("hashchange", fromHash);
 fromHash();
